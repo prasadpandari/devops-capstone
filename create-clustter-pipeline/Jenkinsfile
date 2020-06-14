@@ -1,35 +1,20 @@
 pipeline {
-	agent any
-	stages {
-		stage('k8 cluster create') {
-			steps {
-				withAWS(region:'us-west-2', credentials:'awscredentials') {
-					sh '''
-						eksctl create cluster \
-						--name ppcluster \
-						--version 1.13 \
-						--nodegroup-name standard-workers \
-						--node-type t2.small \
-						--nodes 2 \
-						--nodes-min 1 \
-						--nodes-max 3 \
-						--node-ami auto \
-						--region us-west-2 \
-						--zones us-west-2a \
-						--zones us-west-2b \
-						--zones us-west-2c \
-					'''
-				}
-			}
-		}
-		stage('Create conf file cluster') {
-			steps {
-				withAWS(region:'us-west-2',credentials:'awscredentials')  {
-					sh 'echo "Uploading content with AWS creds"'
-					sh	'aws eks --region us-west-2 update-kubeconfig --name ppcluster'
-				}
-			}
-		}
+  agent any  
+  parameters {
+    string(name: 'EKS_CLUSTER', defaultValue: 'ppcluster', description: 'EKS Cluster Name')
+  }
+  
+  stages {
 
-	}
+    stage('Create EKS Cluster') {
+
+      steps {
+          withAWS(region:'us-west-2',credentials:'awscredentials')  {
+                echo "Creating EKS Cluster: ${params.EKS_CLUSTER}"
+                sh 'eksctl create cluster -f createCluster.yml'
+                sh 'aws eks list-clusters --region=us-west-2 --output=text'
+          }
+      }
+    }
+  }    
 }
