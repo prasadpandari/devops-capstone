@@ -1,18 +1,11 @@
 pipeline {
   agent any  
-  parameters {
-    string(name: 'EKS_CLUSTER', defaultValue: 'ppcluster', description: 'EKS Cluster Name')
-  }
-  
   stages {
-
     stage('Create EKS Cluster') {
-
       steps {
           withAWS(region:'us-west-2',credentials:'awscredentials')  {
                 echo "Creating EKS Cluster: ${params.EKS_CLUSTER}"
-                sh 'eksctl create cluster -f createCluster.yml'
-                sh 'aws eks list-clusters --region=us-west-2 --output=text'
+              
           }
       }
     }
