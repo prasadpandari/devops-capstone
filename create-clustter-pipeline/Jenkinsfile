@@ -1,12 +1,11 @@
 pipeline {
-  agent any  
+  agent any
   stages {
-    stage('Create EKS Cluster') {
+    stage('create eks cluster') {
       steps {
-          withAWS(region:'us-west-2',credentials:'awscredentials')  {
-                echo "Creating EKS Cluster:" 
-          }
+        sh 'echo "Hello World"'
       }
     }
-  }    
+
+  }  
 }
