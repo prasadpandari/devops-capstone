@@ -4,8 +4,7 @@ pipeline {
     stage('Create EKS Cluster') {
       steps {
           withAWS(region:'us-west-2',credentials:'awscredentials')  {
-                echo "Creating EKS Cluster:"
-              
+                echo "Creating EKS Cluster:" 
           }
       }
     }
