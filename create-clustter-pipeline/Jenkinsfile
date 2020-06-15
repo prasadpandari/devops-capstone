@@ -3,7 +3,7 @@ pipeline {
   stages {
     stage('create eks cluster') {
       steps {
-          withAWS(region:'us-west-2',credentials:'awscredentials') {
+          withAWS(region:'us-west-2',credentials:'aws-static') {
             sh 'echo "Hello World"'
           }
       }
